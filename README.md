@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eddy's EZ Junk Removal
 
-## Getting Started
+Marketing site for **Eddy's EZ Junk Removal LLC** — a family-owned junk removal, light demolition and hauling company in Luray, Virginia, serving Page County and the Shenandoah Valley.
 
-First, run the development server:
+Next.js 16 (App Router) · Tailwind v4 · TypeScript · fully static.
+
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install && npm run dev -- --port 4479
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Dev server |
+| `npm run build` | Static production build (30 prerendered pages) |
+| `npm run lint` | ESLint |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where the content lives
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Everything factual about the business is in three files. Change these, not the pages.
 
-## Learn More
+| File | Holds |
+| --- | --- |
+| `src/lib/business.ts` | Name, phone, address, hours, the 8 services, the 8 towns, load-size ladder |
+| `src/lib/reviews.ts` | Verbatim customer reviews and rating breakdown |
+| `src/lib/photos.ts` | Photo manifest with alt text, categories, and the verified before/after pairs |
 
-To learn more about Next.js, take a look at the following resources:
+`SITE_URL` in `business.ts` drives canonicals, OG tags, the sitemap and JSON-LD — set it to the real domain before launch.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content provenance
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Every photo, review and business fact on this site came from the client's own public presence:
 
-## Deploy on Vercel
+- **Photos** (`public/photos/`, 70 images) — the owner's uploads to their Google Business Profile and the 78-photo project gallery on their Thumbtack Top Pro page. No stock imagery.
+- **Reviews** — verbatim from verified Thumbtack hires. Nothing rewritten or embellished.
+- **Brand** — the black / chrome / acid-green palette and "Fast · Reliable · Affordable" line are taken from the company's own truck decal and business card.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Four before/after pairs in `photos.ts` were each confirmed to be the same space photographed at the start and end of one job.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Booking
+
+There is **no backend**. The five-step form in `src/components/BookingForm.tsx` builds a formatted job ticket and hands it to the customer's own messaging app as an `sms:` deep link to the business line, with tap-to-call and copy-to-clipboard fallbacks. Drafts persist in `localStorage` and are restored through an explicit "Resume" prompt.
+
+To add a real backend later, replace the `submit()` handler with a POST and keep the SMS link as the fallback path.
+
+## SEO
+
+- `LocalBusiness` / `Service` / `FAQPage` / `Review` JSON-LD
+- Generated `sitemap.xml` and `robots.txt`
+- Per-page canonicals, Open Graph and Twitter cards
+- Dedicated pages for all 8 services × 8 service-area towns
+
+## Notes
+
+- The client has no social media accounts. Google Business and Thumbtack are the only external profiles linked, and both are in `BUSINESS.links`.
+- No prices are published anywhere on the site — the pricing page explains the volume model only. Add real figures to `LOAD_SIZES` if the client wants rates shown.
